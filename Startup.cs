@@ -28,6 +28,7 @@ namespace DatingApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddCors();
             services.AddDbContext<DataContext>(db => 
                 db.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
         }
@@ -46,6 +47,7 @@ namespace DatingApp
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
         }
     }
