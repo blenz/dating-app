@@ -7,13 +7,11 @@ import { AuthService } from '../_services/auth.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-
   model: any = {};
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   login() {
     this.authService.login(this.model).subscribe(
@@ -21,8 +19,9 @@ export class NavbarComponent implements OnInit {
         console.log('Logged in');
       },
       err => {
-        console.log('Failed to Login');
-      })
+        console.log(err);
+      }
+    );
   }
 
   loggedIn() {
@@ -34,5 +33,4 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem('token');
     console.log('Logged out');
   }
-
 }
