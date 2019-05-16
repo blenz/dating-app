@@ -1,0 +1,15 @@
+version: '3'
+services:
+  client:
+    build: ./Client
+    ports:
+    - "4200:4000"
+    volumes:
+    - ./Client:/usr/src/app
+    - /usr/src/app/node_modules
+  server:
+    build: ./Server
+    ports:
+    - "5000:5000"
+    volumes:
+    - ./Server:/usr/src/app
