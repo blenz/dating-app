@@ -3,7 +3,7 @@ services:
   client:
     build: ./Client
     ports:
-    - "4200:4000"
+    - "4000:4200"
     volumes:
     - ./Client:/usr/src/app
     - /usr/src/app/node_modules
