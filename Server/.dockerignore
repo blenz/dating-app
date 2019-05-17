@@ -1,4 +1,7 @@
-**/bin
+*.csproj
+**/bin   
+bin   
 **/obj
+obj
 **/.vscode
 **/.vs
