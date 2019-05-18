@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DatingApp.Data;
 using DatingApp.Data.Interfaces;
 using DatingApp.Data.Repositories;
@@ -45,6 +46,8 @@ namespace DatingApp
             services.AddDbContext<DataContext>(db =>
                 db.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
+            Mapper.Reset();
+            services.AddAutoMapper();
             services.AddTransient<Seed>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IDatingRepository, DatingRepository>();
@@ -54,8 +57,7 @@ namespace DatingApp
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(
-                                Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                             ValidateIssuer = false,
                             ValidateAudience = false
                         };
@@ -88,7 +90,7 @@ namespace DatingApp
                 // app.UseHsts();
             }
 
-            seeder.SeedUsers();
+            // seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseMvc();
