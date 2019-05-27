@@ -25,8 +25,8 @@ export const routes: Routes = [
         component: MemberDetailComponent,
         resolve: { user: MemberDetailResolver }
       },
-      { path: 'messages', component: MemberListComponent },
-      { path: 'lists', component: MemberListComponent }
+      { path: 'messages', component: MessagesComponent },
+      { path: 'lists', component: ListsComponent }
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }
