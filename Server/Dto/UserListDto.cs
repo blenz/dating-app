@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using DatingApp.Models;
 
-namespace Server.Dto
+namespace DatingApp.Dto
 {
     public class UserListDto
     {

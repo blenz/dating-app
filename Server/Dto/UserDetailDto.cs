@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using DatingApp.Models;
 
-namespace Server.Dto
+namespace DatingApp.Dto
 {
     public class UserDetailDto
     {
@@ -16,7 +16,7 @@ namespace Server.Dto
         public string LookingFor { get; set; }
         public string Country { get; set; }
         public string PhotoUrl { get; set; }
-        public ICollection<PhotoDto> Photos { get; set; }
+        public ICollection<PhotoForDetailedDto> Photos { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastActive { get; set; }
     }

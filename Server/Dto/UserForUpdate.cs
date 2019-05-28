@@ -1,6 +1,6 @@
 using System;
 
-namespace Server.Dto
+namespace DatingApp.Dto
 {
     public class UserForUpdate
     {

@@ -43,8 +43,10 @@ namespace DatingApp
                     opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
             services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddDbContext<DataContext>(db =>
-                db.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                db.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
+            );
 
             Mapper.Reset();
             services.AddAutoMapper();

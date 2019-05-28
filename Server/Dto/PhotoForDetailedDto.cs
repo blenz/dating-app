@@ -1,8 +1,8 @@
 using System;
 
-namespace Server.Dto
+namespace DatingApp.Dto
 {
-    public class PhotoDto
+    public class PhotoForDetailedDto
     {
         public int Id { get; set; }
         public string Url { get; set; }

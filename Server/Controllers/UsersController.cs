@@ -6,7 +6,7 @@ using AutoMapper;
 using DatingApp.Data.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Server.Dto;
+using DatingApp.Dto;
 
 namespace DatingApp.Controllers
 {

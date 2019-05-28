@@ -1,7 +1,7 @@
 using System.Linq;
 using AutoMapper;
 using DatingApp.Models;
-using Server.Dto;
+using DatingApp.Dto;
 
 namespace DatingApp.Helpers
 {
@@ -12,7 +12,8 @@ namespace DatingApp.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<UserForUpdate, User>();
-            CreateMap<Photo, PhotoDto>();
+            CreateMap<Photo, PhotoForDetailedDto>();
+            CreateMap<Photo, PhotoForReturnDto>();
             CreateMap<User, UserDetailDto>()
                 .ForMember(dest => dest.PhotoUrl, opts =>
                 {
