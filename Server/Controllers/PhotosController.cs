@@ -62,8 +62,8 @@ namespace DatingApp.Controllers
             var user = await _repo.GetUser(userId);
 
             var file = photoForCreation.File;
-            if (file == null)
-                return BadRequest("No file uploaded");
+            // if (file == null)
+            //     return BadRequest("No file uploaded");
 
             var uploadResult = new ImageUploadResult();
 
@@ -101,7 +101,8 @@ namespace DatingApp.Controllers
 
                 return CreatedAtRoute(
                     "GetPhoto",
-                    new { id = photo.Id, photoToReturn }
+                    new { id = photo.Id },
+                    photoToReturn
                 );
             }
 
