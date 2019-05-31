@@ -11,3 +11,10 @@
 input[type='file'] {
   color: transparent;
 }
+
+button {
+  text-align: center;
+  font-size: 70%;
+  padding: 0em 0.5em;
+  line-height: initial;
+}
