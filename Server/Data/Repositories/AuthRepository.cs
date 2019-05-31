@@ -19,6 +19,7 @@ namespace DatingApp.Data.Repositories
         public async Task<User> Login(string username, string password)
         {
             var user = await _context.Users
+                        .Include(p => p.Photos)
                         .FirstOrDefaultAsync(u => u.Username == username);
 
             // user was not found
@@ -36,7 +37,7 @@ namespace DatingApp.Data.Repositories
         {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            
+
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
@@ -60,7 +61,7 @@ namespace DatingApp.Data.Repositories
                 passwordSalt = hmac.Key;
 
                 byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
-                passwordHash         = hmac.ComputeHash(passwordBytes);
+                passwordHash = hmac.ComputeHash(passwordBytes);
             }
         }
 
@@ -69,7 +70,7 @@ namespace DatingApp.Data.Repositories
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
                 byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
-                byte[] computedHash  = hmac.ComputeHash(passwordBytes);
+                byte[] computedHash = hmac.ComputeHash(passwordBytes);
 
                 return computedHash.SequenceEqual(passwordHash);
             }

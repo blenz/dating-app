@@ -4,6 +4,7 @@ using DatingApp.Data;
 using DatingApp.Models;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Data.Interfaces;
+using System.Linq;
 
 namespace DatingApp.Data.Repositories
 {
@@ -46,7 +47,14 @@ namespace DatingApp.Data.Repositories
 
         public async Task<Photo> GetPhoto(int id)
         {
-            return await _context.Photos.FirstOrDefaultAsync(p => p.Id == p.Id);
+            return await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Photo> GetMainPhotoForUser(int userId)
+        {
+            return await _context.Photos
+                    .Where(u => u.UserId == userId)
+                    .FirstOrDefaultAsync(p => p.IsMain);
         }
     }
 }
