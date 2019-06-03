@@ -5,7 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   BsDropdownModule,
   TabsModule,
-  BsDatepickerModule
+  BsDatepickerModule,
+  PaginationModule,
+  ButtonsModule
 } from 'ngx-bootstrap';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxGalleryModule } from 'ngx-gallery';
@@ -71,7 +73,9 @@ export function tokenGetter() {
     }),
     NgxGalleryModule,
     FileUploadModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    PaginationModule.forRoot(),
+    ButtonsModule.forRoot()
   ],
   providers: [
     AuthService,
@@ -86,4 +90,4 @@ export function tokenGetter() {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
