@@ -6,11 +6,10 @@ namespace DatingApp.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
+            migrationBuilder.AddColumn<string>(
                 name: "PublicId",
                 table: "Photos",
-                nullable: false,
-                defaultValue: false);
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
