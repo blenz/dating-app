@@ -1,9 +1,11 @@
 <div class="text-center mt-3">
   <h2>
     {{
-      likesParam === 'Likers' ? 'Members who like me' : "Members who I've Liked"
+      likesParam === 'Likers'
+        ? 'Members who like me:'
+        : "Members who I've Liked:"
     }}
-    : {{ pagination.totalItems }}
+    {{ pagination.totalItems }}
   </h2>
 </div>
 
