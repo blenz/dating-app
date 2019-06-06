@@ -14,8 +14,8 @@ using Server.Helpers;
 namespace DatingApp.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     [ServiceFilter(typeof(LogUserActivity))]
     public class UsersController : ControllerBase
     {
