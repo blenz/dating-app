@@ -68,7 +68,7 @@
         <td>{{ message.messageSent | timeAgo }}</td>
         <td>
           <button
-            class="btn btn-danger"
+            class="btn btn-sm btn-outline-danger"
             (click)="deleteMessage(message.id)"
             (click)="$event.stopPropagation()"
           >

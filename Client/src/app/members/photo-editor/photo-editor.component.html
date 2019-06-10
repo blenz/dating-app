@@ -13,7 +13,7 @@
       </button>
       <button
         type="button"
-        class="btn btn-sm btn-danger"
+        class="btn btn-sm btn-outline-danger"
         (click)="deletePhoto(photo.id)"
         [disabled]="photo.isMain"
       >
@@ -93,7 +93,7 @@
       </button>
       <button
         type="button"
-        class="btn btn-danger btn-s"
+        class="btn btn-sm btn-outline-danger"
         (click)="uploader.clearQueue()"
         [disabled]="!uploader.queue.length"
       >
