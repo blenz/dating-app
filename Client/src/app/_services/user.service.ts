@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../models/user';
-import { PaginatedResults } from '../models/pagination';
+import { User } from '../_models/user';
+import { PaginatedResults } from '../_models/pagination';
 import { map } from 'rxjs/operators';
-import { Message } from '../models/message';
+import { Message } from '../_models/message';
 
 @Injectable({
   providedIn: 'root'

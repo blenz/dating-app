@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { environment } from '../../environments/environment';
-import { User } from '../models/user';
+import { User } from '../_models/user';
 import { TouchSequence } from 'selenium-webdriver';
 
 @Injectable({

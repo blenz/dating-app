@@ -7,7 +7,7 @@ import {
   FormBuilder
 } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
-import { User } from '../models/user';
+import { User } from '../_models/user';
 import { AlertifyService } from '../_services/alertify.service';
 import { Router } from '@angular/router';
 
