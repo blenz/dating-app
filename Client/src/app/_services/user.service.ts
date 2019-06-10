@@ -12,8 +12,6 @@ import { Message } from '../_models/message';
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl = environment.api;
-
   constructor(private http: HttpClient) {}
 
   getUsers(
@@ -49,7 +47,7 @@ export class UserService {
     }
 
     return this.http
-      .get<User[]>(this.baseUrl + '/users', { observe: 'response', params })
+      .get<User[]>(`${environment.api}/users`, { observe: 'response', params })
       .pipe(
         map(response => {
           paginatedResult.result = response.body;
@@ -64,29 +62,27 @@ export class UserService {
   }
 
   getUser(id): Observable<User> {
-    return this.http.get<User>(this.baseUrl + `/users/${id}`);
+    return this.http.get<User>(`${environment.api}/users/${id}`);
   }
 
   updateUser(id: number, user: User): Observable<User> {
-    return this.http.patch<User>(this.baseUrl + `/users/${id}`, user);
+    return this.http.patch<User>(`${environment.api}/users/${id}`, user);
   }
 
   setMainPhoto(userId: number, id: number) {
     return this.http.post(
-      this.baseUrl + '/users/' + userId + '/photos/' + id + '/setMain',
+      `${environment.api}/users/${userId}/photos/${id}/setMain`,
       {}
     );
   }
 
   deletePhoto(userId: number, id: number) {
-    return this.http.delete(
-      this.baseUrl + '/users/' + userId + '/photos/' + id
-    );
+    return this.http.delete(`${environment.api}/users/${userId}/photos/${id}`);
   }
 
   sendLike(id: number, recipientId: number) {
     return this.http.post(
-      this.baseUrl + '/users/' + id + '/like/' + recipientId,
+      `${environment.api}/users/${id}/like/${recipientId}`,
       {}
     );
   }
@@ -105,7 +101,7 @@ export class UserService {
     }
 
     return this.http
-      .get<Message[]>(environment.api + '/users/' + id + '/messages', {
+      .get<Message[]>(`${environment.api}/users/${id}/messages`, {
         observe: 'response',
         params
       })
@@ -124,7 +120,7 @@ export class UserService {
 
   getMessageThread(id: number, recipientId: number) {
     return this.http.get<Message[]>(
-      environment.api + '/users/' + id + '/messages/thread/' + recipientId
+      `${environment.api}/users/${id}/messages/thread/${recipientId}`
     );
   }
 

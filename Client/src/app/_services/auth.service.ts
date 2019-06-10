@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   login(model: any) {
-    return this.http.post(environment.api + '/auth/login', model).pipe(
+    return this.http.post(`${environment.api}/auth/login`, model).pipe(
       map((res: any) => {
         const user = res;
         if (user) {
@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   register(user: User) {
-    return this.http.post(environment.api + '/auth/register', user);
+    return this.http.post(`${environment.api}/auth/register`, user);
   }
 
   loggedIn() {
