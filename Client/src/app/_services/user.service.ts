@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { User } from '../models/user';
 import { PaginatedResults } from '../models/pagination';
 import { map } from 'rxjs/operators';
+import { Message } from '../models/message';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import { map } from 'rxjs/operators';
 export class UserService {
   baseUrl = environment.api;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getUsers(
     page?,
@@ -28,9 +29,7 @@ export class UserService {
     let params = new HttpParams();
 
     if (page != null && itemsPerPage != null) {
-      params = params
-        .append('page', page)
-        .append('size', itemsPerPage);
+      params = params.append('page', page).append('size', itemsPerPage);
     }
 
     if (userParams != null) {
@@ -87,7 +86,65 @@ export class UserService {
 
   sendLike(id: number, recipientId: number) {
     return this.http.post(
-      this.baseUrl + '/users/' + id + '/like/' + recipientId, {}
-    )
+      this.baseUrl + '/users/' + id + '/like/' + recipientId,
+      {}
+    );
+  }
+
+  getMessages(id: number, page?, itemsPerPage?, messageContainer?) {
+    const paginatedResult: PaginatedResults<Message[]> = new PaginatedResults<
+      Message[]
+    >();
+
+    let params = new HttpParams();
+
+    params = params.append('messageContainer', messageContainer);
+
+    if (page != null && itemsPerPage != null) {
+      params = params.append('page', page).append('size', itemsPerPage);
+    }
+
+    return this.http
+      .get<Message[]>(environment.api + '/users/' + id + '/messages', {
+        observe: 'response',
+        params
+      })
+      .pipe(
+        map(response => {
+          paginatedResult.result = response.body;
+          if (response.headers.get('Pagination') !== null) {
+            paginatedResult.pagination = JSON.parse(
+              response.headers.get('Pagination')
+            );
+          }
+          return paginatedResult;
+        })
+      );
+  }
+
+  getMessageThread(id: number, recipientId: number) {
+    return this.http.get<Message[]>(
+      environment.api + '/users/' + id + '/messages/thread/' + recipientId
+    );
+  }
+
+  sendMessage(id: number, message: Message) {
+    return this.http.post(`${environment.api}/users/${id}/messages`, message);
+  }
+
+  deleteMessage(id: number, userId: Message) {
+    return this.http.patch(
+      `${environment.api}/users/${userId}/messages/${id}`,
+      {}
+    );
+  }
+
+  markAsRead(userId: number, messageId: number) {
+    return this.http
+      .patch(
+        `${environment.api}/users/${userId}/messages/${messageId}/read`,
+        {}
+      )
+      .subscribe();
   }
 }
