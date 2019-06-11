@@ -91,6 +91,7 @@
     [boundaryLinks]="true"
     [totalItems]="pagination.totalItems"
     [itemsPerPage]="pagination.itemsPerPage"
+    *ngIf="users.length > 0"
     [(ngModel)]="pagination.currentPage"
     (pageChanged)="pageChanged($event)"
   >
