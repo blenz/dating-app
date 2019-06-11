@@ -47,6 +47,7 @@
     [itemsPerPage]="pagination.itemsPerPage"
     [(ngModel)]="pagination.currentPage"
     (pageChanged)="pageChanged($event)"
+    *ngIf="users.length > 0"
     previousText="&lsaquo;"
     nextText="&rsaquo;"
     firstText="&laquo;"
