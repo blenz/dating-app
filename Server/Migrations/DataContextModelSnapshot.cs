@@ -14,7 +14,8 @@ namespace DatingApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("DatingApp.Models.Like", b =>
                 {
@@ -27,6 +28,36 @@ namespace DatingApp.Migrations
                     b.HasIndex("LikeeId");
 
                     b.ToTable("Likes");
+                });
+
+            modelBuilder.Entity("DatingApp.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime?>("DateRead");
+
+                    b.Property<bool>("IsRead");
+
+                    b.Property<DateTime>("MessageSent");
+
+                    b.Property<bool>("RecipientDeleted");
+
+                    b.Property<int>("RecipientId");
+
+                    b.Property<bool>("SenderDeleted");
+
+                    b.Property<int>("SenderId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("DatingApp.Models.Photo", b =>
@@ -89,36 +120,6 @@ namespace DatingApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Server.Models.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Content");
-
-                    b.Property<DateTime?>("DateRead");
-
-                    b.Property<bool>("IsRead");
-
-                    b.Property<DateTime>("MessageSent");
-
-                    b.Property<bool>("RecipientDeleted");
-
-                    b.Property<bool>("SenderDeleted");
-
-                    b.Property<int>("SenderId");
-
-                    b.Property<int>("recipientId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SenderId");
-
-                    b.HasIndex("recipientId");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("DatingApp.Models.Like", b =>
                 {
                     b.HasOne("DatingApp.Models.User", "Likee")
@@ -132,25 +133,25 @@ namespace DatingApp.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("DatingApp.Models.Message", b =>
+                {
+                    b.HasOne("DatingApp.Models.User", "Recipient")
+                        .WithMany("MessagesRecieved")
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DatingApp.Models.User", "Sender")
+                        .WithMany("MessagesSent")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("DatingApp.Models.Photo", b =>
                 {
                     b.HasOne("DatingApp.Models.User", "User")
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Server.Models.Message", b =>
-                {
-                    b.HasOne("DatingApp.Models.User", "Sender")
-                        .WithMany("MessagesSent")
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("DatingApp.Models.User", "Recipient")
-                        .WithMany("MessagesRecieved")
-                        .HasForeignKey("recipientId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }
