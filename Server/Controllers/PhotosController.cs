@@ -1,16 +1,17 @@
+using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using DatingApp.Data.Interfaces;
+using DatingApp.Dto;
 using DatingApp.Helpers;
+using DatingApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using DatingApp.Dto;
-using System.Security.Claims;
-using CloudinaryDotNet.Actions;
-using DatingApp.Models;
-using System.Linq;
 
 namespace DatingApp.Controllers
 {
@@ -34,13 +35,15 @@ namespace DatingApp.Controllers
             _mapper = mapper;
             _cloudinaryConfig = cloudinaryConfig;
 
+            Console.WriteLine($"DERPPP {_cloudinaryConfig.Value.CloudName}");
+
             // set up cloudinary
             _cloudinary = new Cloudinary(
                 new Account(
                     _cloudinaryConfig.Value.CloudName,
                     _cloudinaryConfig.Value.ApiKey,
                     _cloudinaryConfig.Value.ApiSecret
-            ));
+                ));
         }
 
         [HttpGet("{id}", Name = "GetPhoto")]
@@ -70,13 +73,13 @@ namespace DatingApp.Controllers
             // if there is a file to upload
             if (file.Length > 0)
             {
-                using (var stream = file.OpenReadStream())
+                using(var stream = file.OpenReadStream())
                 {
                     var uploadParams = new ImageUploadParams()
                     {
-                        File = new FileDescription(file.Name, stream),
-                        Transformation = new Transformation()
-                            .Width(500).Height(500).Crop("fill").Gravity("face")
+                    File = new FileDescription(file.Name, stream),
+                    Transformation = new Transformation()
+                    .Width(500).Height(500).Crop("fill").Gravity("face")
                     };
 
                     uploadResult = _cloudinary.Upload(uploadParams);
