@@ -35,8 +35,6 @@ namespace DatingApp.Controllers
             _mapper = mapper;
             _cloudinaryConfig = cloudinaryConfig;
 
-            Console.WriteLine($"DERPPP {_cloudinaryConfig.Value.CloudName}");
-
             // set up cloudinary
             _cloudinary = new Cloudinary(
                 new Account(
