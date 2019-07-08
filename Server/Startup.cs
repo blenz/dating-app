@@ -42,17 +42,16 @@ namespace DatingApp
                 );
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuerSigningKey = true,
+                .AddJwtBearer(options =>
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
-                                Configuration.GetSection("AppSettings:Token").Value)
-                            ),
+                                Configuration.GetSection("AppSettings_Token").Value)),
                             ValidateIssuer = false,
                             ValidateAudience = false
-                        }
-                    );
+                    }
+                );
 
             services.AddDbContext<DataContext>(db =>
                 db.UseMySql(Configuration.GetConnectionString("DefaultConnection"))
@@ -84,7 +83,7 @@ namespace DatingApp
                 {
                     builder.Run(async context =>
                     {
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
                         var error = context.Features.Get<IExceptionHandlerFeature>();
                         if (error != null)

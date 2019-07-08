@@ -58,14 +58,13 @@ namespace DatingApp.Controllers
             if (userFromRepo == null)
                 return Unauthorized();
 
-            var claims = new[]
+            var claims = new []
             {
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
                 new Claim(ClaimTypes.Name, userFromRepo.Username)
             };
 
-
-            var appToken = Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value);
+            var appToken = Encoding.UTF8.GetBytes(_config.GetSection("AppSettings_Token").Value);
             var key = new SymmetricSecurityKey(appToken);
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -86,7 +85,7 @@ namespace DatingApp.Controllers
             return Ok(new
             {
                 token = tokenHandler.WriteToken(token),
-                user
+                    user
             });
         }
     }
