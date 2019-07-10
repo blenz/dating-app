@@ -7,16 +7,13 @@ jobs:
     steps:
       - checkout
 
-      - run: cd Client
-
       - restore_cache:
           key: npm-dependency-cache-{{ checksum "package.json" }}
 
-
       - run:
           name: Install npm packages
-          command: npm install && npm install -g @angular/cli@6.0.8
+          command: cd Client && npm install && npm install -g @angular/cli@6.0.8
 
       - run:
           name: Build angular app
-          command: ng build --prod --build-optimizer=false
+          command: cd Client && ng build --prod --build-optimizer=false
