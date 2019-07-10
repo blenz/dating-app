@@ -1,19 +1,23 @@
 version: 2
 jobs:
   build:
+
+    working_directory: ~/project/Client
+
     docker:
       - image: circleci/node:11
 
     steps:
       - checkout
-
+      
       - restore_cache:
           key: npm-dependency-cache-{{ checksum "package.json" }}
 
+
       - run:
           name: Install npm packages
-          command: cd Client && npm install && npm install -g @angular/cli@6.0.8
+          command: npm install && npm install -g @angular/cli@6.0.8
 
       - run:
           name: Build angular app
-          command: cd Client && ng build --prod --build-optimizer=false
+          command: ng build --prod --build-optimizer=false
