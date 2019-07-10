@@ -1,16 +1,22 @@
 version: 2
 jobs:
   build:
+
+    working_directory: ~/project
+
     docker:
-      - image: debian:stretch
+      - image: circleci/node:11
 
     steps:
       - checkout
 
-      - run:
-          name: Greeting
-          command: echo Hello, world.
+      - restore_cache:
+          key: npm-dependency-cache-{{ checksum "package.json" }}
 
       - run:
-          name: Print the Current Time
-          command: date
+          name: Install npm packages
+          command: npm install && npm install -g @angular/cli@6.0.8
+
+      - run:
+          name: Build angular app
+          command: ng build --prod --build-optimizer=false
