@@ -10,9 +10,10 @@ jobs:
     steps:
       - checkout
       
+      - run: ls -l
+
       - restore_cache:
           key: npm-dependency-cache-{{ checksum "package.json" }}
-
 
       - run:
           name: Install npm packages
