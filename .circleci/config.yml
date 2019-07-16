@@ -7,20 +7,21 @@ jobs:
     steps:
       - checkout:
           path: ~/project
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Build frontend image
           command: |
-            sudo docker build \
+            docker build \
               -t blenz1/dating-frontend:$CIRCLE_SHA1 \
               -t blenz1/dating-frontend:lastest \
               -f build/prod/Dockerfile .
       - run:
           name: Push image to dockerhub
           command: |
-            sudo docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-            sudo docker push blenz1/dating-frontend:latest
-            sudo docker push blenz1/dating-frontend:$CIRCLE_SHA1
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker push blenz1/dating-frontend:latest
+            docker push blenz1/dating-frontend:$CIRCLE_SHA1
       - run:
           name: Install kubernetes
           command: |
