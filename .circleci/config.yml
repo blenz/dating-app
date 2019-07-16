@@ -13,13 +13,13 @@ jobs:
           name: Build frontend image
           command: |
             docker build \
-              -t blenz1/dating-frontend:lastest \
+              -t blenz1/dating-frontend:$CIRCLE_SHA1 \
+              -t blenz1/dating-frontend:latest \
               -f build/prod/Dockerfile .
       - run:
           name: Push image to dockerhub
           command: |
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-            docker tag blenz1/dating-frontend:latest blenz1/dating-frontend:$CIRCLE_SHA1
             docker push blenz1/dating-frontend:latest
             docker push blenz1/dating-frontend:$CIRCLE_SHA1
       - run:
