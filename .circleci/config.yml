@@ -48,3 +48,6 @@ workflows:
     jobs:
       - deploy_frontend:
           context: global
+          filters:
+            branches:
+              only: master
