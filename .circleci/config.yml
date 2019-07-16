@@ -1,25 +1,50 @@
 version: 2
 jobs:
-  build:
-
+  deploy_frontend:
     working_directory: ~/project/Client
-
     docker:
       - image: circleci/node:11
-
     steps:
       - checkout:
           path: ~/project
-      
-      - run: ls -l
-
-      - restore_cache:
-          key: npm-dependency-cache-{{ checksum "package.json" }}
-
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Install npm packages
-          command: npm install && sudo npm install -g @angular/cli@6.0.8
-
+          name: Build frontend image
+          command: |
+            sudo docker build \
+              -t blenz1/dating-frontend:$CIRCLE_SHA1 \
+              -t blenz1/dating-frontend:lastest \
+              -f build/prod/Dockerfile .
       - run:
-          name: Build angular app
-          command: ng build --prod --build-optimizer=false
+          name: Push image to dockerhub
+          command: |
+            sudo docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            sudo docker push blenz1/dating-frontend:latest
+            sudo docker push blenz1/dating-frontend:$CIRCLE_SHA1
+      - run:
+          name: Install kubernetes
+          command: |
+            sudo apt-get update && sudo apt-get install -y apt-transport-https
+            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+            sudo apt-get update
+            sudo apt-get install -y kubectl
+      - run:
+          name: Deploy to kubernetes
+          command: |
+            kubectl \
+              --insecure-skip-tls-verify \
+              --kubeconfig=/dev/null \
+              --server=$KUBE_SERVER \
+              --token=$KUBE_TOKEN \
+                set image \
+                deployment/dating-frontend \
+                dating-frontend=blenz1/dating-frontend:$CIRCLE_SHA1
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - deploy_frontend:
+          context: global
