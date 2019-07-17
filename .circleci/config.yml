@@ -1,16 +1,99 @@
 version: 2
 jobs:
-  build:
+  deploy_frontend:
+    working_directory: ~/project/Client
     docker:
-      - image: debian:stretch
-
+      - image: circleci/buildpack-deps:stretch
     steps:
-      - checkout
-
+      - checkout:
+          path: ~/project
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Greeting
-          command: echo Hello, world.
-
+          name: Build frontend image
+          command: |
+            docker build \
+              -t blenz1/dating-frontend:$CIRCLE_SHA1 \
+              -t blenz1/dating-frontend:latest \
+              -f build/prod/Dockerfile .
       - run:
-          name: Print the Current Time
-          command: date
+          name: Push image to dockerhub
+          command: |
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker push blenz1/dating-frontend:latest
+            docker push blenz1/dating-frontend:$CIRCLE_SHA1
+      - run:
+          name: Install kubernetes
+          command: |
+            sudo apt-get update && sudo apt-get install -y apt-transport-https
+            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+            sudo apt-get update
+            sudo apt-get install -y kubectl
+      - run:
+          name: Deploy to kubernetes
+          command: |
+            kubectl \
+              --insecure-skip-tls-verify \
+              --kubeconfig=/dev/null \
+              --server=$KUBE_SERVER \
+              --token=$KUBE_TOKEN \
+                set image \
+                deployment/dating-frontend \
+                dating-frontend=blenz1/dating-frontend:$CIRCLE_SHA1
+  deploy_backend:
+    working_directory: ~/project/Server
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout:
+          path: ~/project
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build backend image
+          command: |
+            sudo docker build \
+              -t blenz1/dating-backend:$CIRCLE_SHA1 \
+              -t blenz1/dating-backend:latest \
+              -f build/prod/Dockerfile .
+      - run:
+          name: Push image to dockerhub
+          command: |
+            sudo docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            sudo docker push blenz1/dating-backend:latest
+            sudo docker push blenz1/dating-backend:$CIRCLE_SHA1
+      - run:
+          name: Install kubernetes
+          command: |
+            sudo apt-get update && sudo apt-get install -y apt-transport-https
+            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+            sudo apt-get update
+            sudo apt-get install -y kubectl
+      - run:
+          name: Deploy to kubernetes
+          command: |
+            kubectl \
+              --insecure-skip-tls-verify \
+              --kubeconfig=/dev/null \
+              --server=$KUBE_SERVER \
+              --token=$KUBE_TOKEN \
+                set image \
+                deployment/dating-backend \
+                dating-backend=blenz1/dating-backend:$CIRCLE_SHA1
+
+workflows:
+  version: 2
+  deploy_frontend:
+    jobs:
+      - deploy_frontend:
+          context: global
+          filters:
+            branches:
+              only: master
+      - deploy_backend:
+          context: global
+          filters:
+            branches:
+              only: master
