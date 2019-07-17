@@ -79,6 +79,16 @@ namespace DatingApp
             }
             else
             {
+                // run db migrations
+                using(var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    using(var context = scope.ServiceProvider.GetService<DataContext>())
+                    {
+                        context.Database.Migrate();
+                    }
+                }
+
+                // add exception handler
                 app.UseExceptionHandler(builder =>
                 {
                     builder.Run(async context =>
