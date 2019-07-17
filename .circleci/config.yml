@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  deploy_frontend:
+  build_frontend:
     working_directory: ~/app/Client
     docker:
       - image: k3integrations/kubectl:latest
@@ -22,18 +22,7 @@ jobs:
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
             docker push $DOCKER_USERNAME/dating-frontend:latest
             docker push $DOCKER_USERNAME/dating-frontend:$CIRCLE_SHA1
-      - run:
-          name: Deploy to kubernetes
-          command: |
-            kubectl \
-              --insecure-skip-tls-verify \
-              --kubeconfig=/dev/null \
-              --server=$KUBE_SERVER \
-              --token=$KUBE_TOKEN \
-                set image \
-                deployment/dating-frontend \
-                dating-frontend=$DOCKER_USERNAME/dating-frontend:$CIRCLE_SHA1
-  deploy_backend:
+  build_backend:
     working_directory: ~/app/Server
     docker:
       - image: k3integrations/kubectl:latest
@@ -55,8 +44,24 @@ jobs:
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
             docker push $DOCKER_USERNAME/dating-backend:latest
             docker push $DOCKER_USERNAME/dating-backend:$CIRCLE_SHA1
+  deploy_frontend_and_backend:
+    working_directory: ~/app/Server
+    docker:
+      - image: k3integrations/kubectl:latest
+    steps:
       - run:
-          name: Deploy to kubernetes
+          name: Deploy frontend to kubernetes
+          command: |
+            kubectl \
+              --insecure-skip-tls-verify \
+              --kubeconfig=/dev/null \
+              --server=$KUBE_SERVER \
+              --token=$KUBE_TOKEN \
+                set image \
+                deployment/dating-frontend \
+                dating-frontend=$DOCKER_USERNAME/dating-frontend:$CIRCLE_SHA1
+      - run:
+          name: Deploy backend to kubernetes
           command: |
             kubectl \
               --insecure-skip-tls-verify \
@@ -71,13 +76,21 @@ workflows:
   version: 2
   deploy_dating_app:
     jobs:
-      - deploy_frontend:
+      - build_frontend:
           context: global
           filters:
             branches:
               only: master
-      - deploy_backend:
+      - build_backend:
           context: global
+          filters:
+            branches:
+              only: master
+      - deploy_frontend_and_backend:
+          context: global
+          requires:
+            - build_frontend
+            - build_backend
           filters:
             branches:
               only: master
