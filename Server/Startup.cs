@@ -103,6 +103,7 @@ namespace DatingApp
                 using(var context = scope.ServiceProvider.GetService<DataContext>())
                 {
                     context.Database.Migrate();
+                    Console.WriteLine("Executed Migrations");
                 }
             }
 
