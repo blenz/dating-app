@@ -3,7 +3,7 @@ jobs:
   deploy_frontend:
     working_directory: ~/project/Client
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: k3integrations/kubectl:latest
     steps:
       - checkout:
           path: ~/project
@@ -23,14 +23,6 @@ jobs:
             docker push blenz1/dating-frontend:latest
             docker push blenz1/dating-frontend:$CIRCLE_SHA1
       - run:
-          name: Install kubernetes
-          command: |
-            sudo apt-get update && sudo apt-get install -y apt-transport-https
-            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-            sudo apt-get update
-            sudo apt-get install -y kubectl
-      - run:
           name: Deploy to kubernetes
           command: |
             kubectl \
@@ -44,7 +36,7 @@ jobs:
   deploy_backend:
     working_directory: ~/project/Server
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: k3integrations/kubectl:latest
     steps:
       - checkout:
           path: ~/project
@@ -63,14 +55,6 @@ jobs:
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
             docker push blenz1/dating-backend:latest
             docker push blenz1/dating-backend:$CIRCLE_SHA1
-      - run:
-          name: Install kubernetes
-          command: |
-            sudo apt-get update && sudo apt-get install -y apt-transport-https
-            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-            sudo apt-get update
-            sudo apt-get install -y kubectl
       - run:
           name: Deploy to kubernetes
           command: |
