@@ -85,7 +85,7 @@ jobs:
 
 workflows:
   version: 2
-  deploy_frontend:
+  deploy_dating_app:
     jobs:
       - deploy_frontend:
           context: global
