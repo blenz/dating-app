@@ -9,12 +9,8 @@ RUN dotnet restore
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Create a migration script
-RUN dotnet ef migrations script -i -o migrations.sql
-
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
 WORKDIR /app
 COPY --from=build-env /app/out .
-COPY --from=build-env /app/migrations.sql .
 ENTRYPOINT ["dotnet", "DatingApp.dll"]
