@@ -30,7 +30,7 @@ export class NavbarComponent implements OnInit {
         this.alertify.success('Logged in');
       },
       err => {
-        this.alertify.error(err);
+        this.alertify.error('Invalid username or password');
       },
       () => {
         this.router.navigate(['/members']);
