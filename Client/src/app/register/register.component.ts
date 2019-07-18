@@ -32,7 +32,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.bsConfig = {
-      containerClass: 'theme-red'
+      containerClass: 'theme-red',
+      maxDate: new Date(new Date().setFullYear(new Date().getFullYear() - 18))
     };
     this.createRegisterForm();
   }
@@ -61,7 +62,9 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    if (!this.registerForm.valid) return;
+    if (!this.registerForm.valid) {
+      return;
+    }
 
     this.user = Object.assign({}, this.registerForm.value);
 
