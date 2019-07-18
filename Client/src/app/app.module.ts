@@ -71,8 +71,8 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        whitelistedDomains: ['localhost:5000'],
-        blacklistedRoutes: ['localhost:5000/api/auth']
+        whitelistedDomains: ['localhost'],
+        blacklistedRoutes: ['localhost/api/auth']
       }
     }),
     NgxGalleryModule,
