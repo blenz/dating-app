@@ -2,9 +2,9 @@
 
 - Clone repo
 - Fill out Server/appsettings.Development.json
-- - Cloudinary
-- - AppSettings
-- - ConnectionStrings
+  - Cloudinary
+  - AppSettings
+  - ConnectionStrings
 - run `make migrations`
 - run `make frontend`
 - run `make backend`
