@@ -2,6 +2,9 @@
 backend:
 	dotnet watch -p Server run
 
+migrations:
+	dotnet ef database update --project Server
+
 frontend:
 	npm run start --prefix Client
 
