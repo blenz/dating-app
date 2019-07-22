@@ -2,15 +2,11 @@
 backend:
 	dotnet watch -p Server run
 
+migrations:
+	dotnet ef database update --project Server
+
 frontend:
 	npm run start --prefix Client
-
-app:
-	@docker-compose up --force-recreate
-
-kill:
-	@docker-compose stop
-
 
 deploy-frontend:
 	docker build --rm -t blenz1/dating-frontend -f Client/build/prod/Dockerfile Client
