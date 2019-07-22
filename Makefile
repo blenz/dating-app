@@ -5,13 +5,6 @@ backend:
 frontend:
 	npm run start --prefix Client
 
-app:
-	@docker-compose up --force-recreate
-
-kill:
-	@docker-compose stop
-
-
 deploy-frontend:
 	docker build --rm -t blenz1/dating-frontend -f Client/build/prod/Dockerfile Client
 	docker push blenz1/dating-frontend
