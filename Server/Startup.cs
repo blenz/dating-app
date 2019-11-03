@@ -73,6 +73,15 @@ namespace DatingApp
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seeder)
         {
+            // run db migrations
+            using(var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                using(var context = scope.ServiceProvider.GetService<DataContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
